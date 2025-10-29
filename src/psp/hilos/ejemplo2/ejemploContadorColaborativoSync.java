@@ -1,11 +1,17 @@
 package psp.hilos.ejemplo2;
 
-public class ejemploContadorColaborativo {
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class ejemploContadorColaborativoSync {
 
     private static int value = 0;
 
     private static final int THREADS = 10;
     private static final int INCREMENTS_PER_THREAD = 100000;
+
+
 
     synchronized public void incrementa(){
 
@@ -13,15 +19,15 @@ public class ejemploContadorColaborativo {
 
         value = value + 1;
 
-        if(valorPrevio != (value-1)){
-            System.out.println("Valor previo: "+valorPrevio+" - Valor actual: "+value);
+        if (valorPrevio != (value - 1)) {
+            System.out.println("Valor previo: " + valorPrevio + " - Valor actual: " + value);
         }
 
     }
 
     public static void main(String[] args) {
 
-        ejemploContadorColaborativo ecc = new ejemploContadorColaborativo();
+        ejemploContadorColaborativoSync ecc = new ejemploContadorColaborativoSync();
 
         Thread[] threads = new Thread[THREADS];
         for (int i = 0; i < THREADS; i++){
