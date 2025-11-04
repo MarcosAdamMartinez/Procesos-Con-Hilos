@@ -20,9 +20,10 @@ public class BufferProductos {
         this(DEFAULT_MAX_CAPACIDAD);
     }
 
-    public int consumir() throws InterruptedException{
+    public synchronized int consumir() throws InterruptedException{
 
         while (estaVacio){
+            System.out.println("Buffer vacío");
             wait();
         }
 
@@ -33,10 +34,38 @@ public class BufferProductos {
         }
 
         estaLleno = false;
+
+        System.out.println("Se ha consumido el producto: "+buffer[siguiente]);
         notifyAll();
 
         return buffer[siguiente];
 
+    }
+
+    public synchronized void producir(int producto) throws InterruptedException{
+
+        while (estaLleno){
+            System.out.println("Buffer lleno");
+            wait();
+        }
+
+        buffer[siguiente] = producto;
+
+        siguiente++;
+
+        if (siguiente == buffer.length){
+            estaLleno = true;
+        }
+
+        estaVacio = false;
+
+        System.out.println("Se ha producido el producto: "+producto);
+        notifyAll();
+
+    }
+
+    public boolean estaVacio(){
+        return estaVacio;
     }
 
 }
